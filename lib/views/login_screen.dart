@@ -28,20 +28,29 @@ class _LoginScreenState extends State<LoginScreen> {
     final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-        centerTitle: true,
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 26),
-        backgroundColor: const Color.fromRGBO(32, 87, 129, 1),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 32),
+                const Text(
+                  "Register",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Image.asset(
+                  'assets/images/foto1.png',
+                  height: 100,
+                ),
+                const SizedBox(height: 32),
                 if (alert != null)
                   CustomText(
                     text: "$alert",
