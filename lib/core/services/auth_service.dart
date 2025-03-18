@@ -2,6 +2,7 @@ import 'dart:convert';
 // import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/core/models/minuman.dart';
 import '../models/user.dart';
 // import '../../utils/storage_helper.dart';
 
@@ -64,12 +65,32 @@ class AuthService {
     return null;
   }
 
-  // Method untuk mengecek apakah user sudah login
-  Future<bool> isLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString(tokenKey);
-    return token != null; // Jika token ada, berarti user sudah login
+  Future<List<Minuman>?> fetchMinuman() async {
+    try {
+      final response = await http.get(Uri.parse("$baseUrl/minuman"));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (responseData['success'] == true &&
+            responseData.containsKey('minuman')) {
+          List<dynamic> minumanData =
+              responseData['minuman']; // Ambil hanya array-nya
+          return minumanData.map((item) => Minuman.fromJson(item)).toList();
+        }
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
+    return null;
   }
+
+  // Method untuk mengecek apakah user sudah login
+  // Future<bool> isLoggedIn() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String? token = prefs.getString(tokenKey);
+  //   return token != null; // Jika token ada, berarti user sudah login
+  // }
 
   // Method untuk logout
   Future<void> logout() async {

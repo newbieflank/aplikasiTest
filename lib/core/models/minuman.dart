@@ -4,11 +4,11 @@ part 'minuman.g.dart';
 
 @JsonSerializable()
 class Minuman {
-  String id;
+  int id;
   String nama;
   String deskripsi;
   double harga;
-  bool status;
+  int status;
   Minuman({
     required this.id,
     required this.nama,

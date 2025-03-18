@@ -110,6 +110,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return const ProfileScreen();
       case 2:
         return const PesananScreen();
+      case 3:
+        return const MinumanScreen();
       default:
         return const Center(child: Text("Page Not Found"));
     }

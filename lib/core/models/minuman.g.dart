@@ -7,11 +7,11 @@ part of 'minuman.dart';
 // **************************************************************************
 
 Minuman _$MinumanFromJson(Map<String, dynamic> json) => Minuman(
-      id: json['id'] as String,
+      id: json['id'] as int,
       nama: json['nama'] as String,
       deskripsi: json['deskripsi'] as String,
       harga: (json['harga'] as num).toDouble(),
-      status: json['status'] as bool,
+      status: json['status'] as int,
     );
 
 Map<String, dynamic> _$MinumanToJson(Minuman instance) => <String, dynamic>{
