@@ -56,180 +56,180 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Register",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: const Color.fromRGBO(32, 87, 129, 1),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(
-                  controller: _nameController,
-                  hintText: "name",
-                  icon: const Icon(Icons.person_2),
-                  keyboardType: TextInputType.name,
-                  validator: (value) => value!.isEmpty ? "Masukan name" : null,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 32),
+              const Text(
+                "Register",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                CustomTextField(
-                  controller: _usernameController,
-                  hintText: "Username",
-                  icon: const Icon(Icons.person),
-                  keyboardType: TextInputType.name,
-                  validator: (value) =>
-                      value!.isEmpty ? "Masukan username" : null,
-                ),
-                const SizedBox(height: 16),
-                CustomDropdown(
-                  items: ["Laki-Laki", "Perempuan"],
-                  value: selectedGender,
-                  hint: "Jenis Kelamin",
-                  itemLabel: (item) => item,
-                  itemIcon: (item) {
-                    switch (item) {
-                      case "Laki-Laki":
-                        return Icons.male;
-                      case "Perempuan":
-                        return Icons.female;
-                      default:
-                        return Icons.people;
-                    }
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      selectedGender = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return "Pilih Jenis kelamin";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomDatePicker(
-                  initialDate: selectedDate,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                  onDateSelected: handleDateSelection,
-                  validator: (date) {
-                    if (date == null) {
-                      return "Masukan Tanggal lahir";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _no_telpController,
-                  hintText: "No Telepon",
-                  icon: Icon(Icons.phone),
-                  keyboardType: TextInputType.number,
-                  validator: (value) => _checknumber(value),
-                ),
-                SizedBox(height: 16),
-                CustomTextField(
-                  controller: _alamatController,
-                  maxLine: 3,
-                  hintText: "Alamat",
-                  icon: Icon(Icons.home),
-                  keyboardType: TextInputType.text,
-                  validator: (value) =>
-                      value!.isEmpty ? "Masukan Alamat" : null,
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _emailController,
-                  hintText: "Email",
-                  icon: Icon(Icons.email),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) => (value == null || value.isEmpty)
-                      ? "Email is required"
-                      : (!emailRegex.hasMatch(value)
-                          ? "Format email tidak valid"
-                          : null),
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _passwordController,
-                  hintText: "Password",
-                  icon: Icon(Icons.lock),
-                  isPassword: true,
-                  validator: (value) => value!.isEmpty
-                      ? "Masukan password"
-                      : value.length < 8
-                          ? "password minimal 8 karakter"
-                          : (!passwordRegex.hasMatch(value))
-                              ? "password harus berisi angka dan huruf"
-                              : null,
-                ),
-                const SizedBox(height: 36),
-                CustomButton(
-                  text: "Register",
-                  isLoading: authViewModel.isLoading,
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      bool success = await authViewModel.register(
-                        _nameController.text.trim(),
-                        _emailController.text.trim(),
-                        _passwordController.text.trim(),
-                        _usernameController.text.trim(),
-                        selectedGender!,
-                        _no_telpController.text.trim(),
-                        _alamatController.text.trim(),
-                        DateFormat('yyyy-MM-dd').format(selectedDate!),
-                      );
+              ),
+              const SizedBox(height: 12),
+              Image.asset(
+                'assets/images/foto1.png',
+                height: 100,
+              ),
+              const SizedBox(height: 16),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CustomTextField(
+                      controller: _nameController,
+                      hintText: "Name",
+                      icon: const Icon(Icons.person_2),
+                      keyboardType: TextInputType.name,
+                      validator: (value) =>
+                          value!.isEmpty ? "Masukkan nama" : null,
+                    ),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      controller: _usernameController,
+                      hintText: "Username",
+                      icon: const Icon(Icons.person),
+                      keyboardType: TextInputType.name,
+                      validator: (value) =>
+                          value!.isEmpty ? "Masukkan username" : null,
+                    ),
+                    const SizedBox(height: 12),
+                    CustomDropdown(
+                      items: ["Laki-Laki", "Perempuan"],
+                      value: selectedGender,
+                      hint: "Jenis Kelamin",
+                      itemLabel: (item) => item,
+                      itemIcon: (item) =>
+                          item == "Laki-Laki" ? Icons.male : Icons.female,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGender = value;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? "Pilih jenis kelamin" : null,
+                    ),
+                    const SizedBox(height: 12),
+                    CustomDatePicker(
+                      initialDate: selectedDate,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      onDateSelected: handleDateSelection,
+                      validator: (date) =>
+                          date == null ? "Masukkan tanggal lahir" : null,
+                    ),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      controller: _no_telpController,
+                      hintText: "No Telepon",
+                      icon: const Icon(Icons.phone),
+                      keyboardType: TextInputType.number,
+                      validator: (value) => _checknumber(value),
+                    ),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      controller: _alamatController,
+                      maxLine: 3,
+                      hintText: "Alamat",
+                      icon: const Icon(Icons.home),
+                      keyboardType: TextInputType.text,
+                      validator: (value) =>
+                          value!.isEmpty ? "Masukkan alamat" : null,
+                    ),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      controller: _emailController,
+                      hintText: "Email",
+                      icon: const Icon(Icons.email),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => (value == null || value.isEmpty)
+                          ? "Email wajib diisi"
+                          : (!emailRegex.hasMatch(value)
+                              ? "Format email tidak valid"
+                              : null),
+                    ),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      controller: _passwordController,
+                      hintText: "Password",
+                      icon: const Icon(Icons.lock),
+                      isPassword: true,
+                      validator: (value) => value!.isEmpty
+                          ? "Masukkan password"
+                          : value.length < 8
+                              ? "Password minimal 8 karakter"
+                              : (!passwordRegex.hasMatch(value))
+                                  ? "Password harus berisi angka dan huruf"
+                                  : null,
+                    ),
+                    const SizedBox(height: 24),
+                    CustomButton(
+                      text: "Register",
+                      isLoading: authViewModel.isLoading,
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          bool success = await authViewModel.register(
+                            _nameController.text.trim(),
+                            _emailController.text.trim(),
+                            _passwordController.text.trim(),
+                            _usernameController.text.trim(),
+                            selectedGender!,
+                            _no_telpController.text.trim(),
+                            _alamatController.text.trim(),
+                            DateFormat('yyyy-MM-dd').format(selectedDate!),
+                          );
 
-                      if (success) {
-                        showCustomDialog(
-                          context,
-                          "Registrasi Berhasil",
-                          "Silakan login untuk melanjutkan.",
-                          true,
-                          () {
-                            Navigator.pushReplacement(
+                          if (success) {
+                            showCustomDialog(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()),
+                              "Registrasi Berhasil",
+                              "Silakan login untuk melanjutkan.",
+                              true,
+                              () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()),
+                                );
+                              },
                             );
-                          },
-                        );
-                      } else {
-                        showCustomDialog(
+                          } else {
+                            showCustomDialog(
+                              context,
+                              "Registrasi Gagal",
+                              "Pastikan semua data telah diisi dengan benar.",
+                              false,
+                              () {},
+                            );
+                          }
+                        }
+                      },
+                      backgroundColor: Colors.blue,
+                      textColor: Colors.white,
+                      height: 50,
+                    ),
+                    const SizedBox(height: 8.0),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
                           context,
-                          "Registrasi Gagal",
-                          "Pastikan anda sudah mengisi semuanya dengan benar.",
-                          false,
-                          () {},
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
                         );
-                      }
-                    }
-                  },
-                  backgroundColor: Colors.blue,
-                  textColor: Colors.white,
-                  height: 50,
+                      },
+                      child: const Text("Login"),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
