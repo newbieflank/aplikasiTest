@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_app/views/register_screen.dart';
 import 'core/viewmodels/auth_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/core/models/user.dart';

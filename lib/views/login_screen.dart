@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_app/views/register_screen.dart';
-import 'package:test_app/widgets/custom_text.dart';
 import '../core/viewmodels/auth_viewmodel.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_text.dart';
 import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,107 +26,136 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
-
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
+      body: Stack(
+        children: [
+          Container(
+            height: 280,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF3A5A98), Color(0xFF1A3A72)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 32),
-                const Text(
-                  "Register",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Image.asset(
-                  'assets/images/foto1.png',
-                  height: 100,
-                ),
-                const SizedBox(height: 32),
-                if (alert != null)
-                  CustomText(
-                    text: "$alert",
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                CustomTextField(
-                  controller: _emailController,
-                  hintText: "Email",
-                  icon: const Icon(Icons.email),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) => (value == null || value.isEmpty)
-                      ? "Email is required"
-                      : (!emailRegex.hasMatch(value)
-                          ? "Enter a valid email"
-                          : null),
-                ),
-                const SizedBox(height: 14),
-                CustomTextField(
-                  controller: _passwordController,
-                  hintText: "Password",
-                  icon: const Icon(Icons.lock),
-                  buttonIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isPass = !isPass;
-                        });
-                      },
-                      icon: Icon(
-                          isPass ? Icons.visibility : Icons.visibility_off)),
-                  isPassword: isPass,
-                  validator: (value) =>
-                      value!.isEmpty ? "Enter password" : null,
-                ),
-                const SizedBox(height: 14),
-                CustomButton(
-                  text: "Login",
-                  isLoading: authViewModel.isLoading,
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      bool success = await authViewModel.login(
-                        _emailController.text.trim(),
-                        _passwordController.text.trim(),
-                      );
-
-                      if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DashboardScreen()),
-                        );
-                      } else {
-                        alert = "Email atau Password salah!";
-                      }
-                    }
-                  },
-                  backgroundColor: Colors.blue,
-                  textColor: Colors.white,
-                  height: 50,
-                ),
+                Image.asset('assets/images/foto1.png', height: 80),
                 const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()),
-                    );
-                  },
-                  child: const Text("Register"),
+                const CustomText(
+                  text: "Login",
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 8),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomText(
+                    text: "Masuk Ke Akun Anda Sekarang!",
+                    fontSize: 14,
+                    color: Colors.white,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
           ),
-        ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.7,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextField(
+                      controller: _emailController,
+                      hintText: "Email",
+                      icon: const Icon(Icons.email),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => (value == null || value.isEmpty)
+                          ? "Email harus diisi"
+                          : (!emailRegex.hasMatch(value)
+                              ? "Masukkan email yang valid"
+                              : null),
+                    ),
+                    const SizedBox(height: 14),
+                    CustomTextField(
+                      controller: _passwordController,
+                      hintText: "Password",
+                      icon: const Icon(Icons.lock),
+                      isPassword: isPass,
+                      buttonIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isPass = !isPass;
+                          });
+                        },
+                        icon: Icon(
+                            isPass ? Icons.visibility : Icons.visibility_off),
+                      ),
+                      validator: (value) =>
+                          value!.isEmpty ? "Password harus diisi" : null,
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: CustomButton(
+                        text: "Masuk",
+                        isLoading: authViewModel.isLoading,
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            bool success = await authViewModel.login(
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                            );
+                            if (success) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DashboardScreen(),
+                                ),
+                              );
+                            } else {
+                              alert = "Email atau Password salah!";
+                            }
+                          }
+                        },
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        height: 50,
+                      ),
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()),
+                          );
+                        },
+                        child: const Text("Register"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
