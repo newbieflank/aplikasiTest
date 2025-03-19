@@ -26,11 +26,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _alamatController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final RegExp emailRegex =
-      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail+\.[a-zA-Z]{2,}$');
   final RegExp passwordRegex =
-      RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$');
-
+      RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+  bool isPass = true;
   _checkNumber(String? value) {
     if (value == null || value.isEmpty) {
       return "Masukkan no telepon";
@@ -39,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String pattern = r'^(?:\+62|62|0)[0-9]{9,13}$';
     RegExp regex = RegExp(pattern);
 
-    if (!regex.hasMatch(value) || value.length > 13) {
+    if (!regex.hasMatch(value)) {
       return "Masukkan nomor telepon yang valid";
     }
 
@@ -189,7 +188,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller: _passwordController,
                         hintText: "Password",
                         icon: const Icon(Icons.lock),
-                        isPassword: true,
+                        isPassword: isPass,
+                        buttonIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isPass = !isPass;
+                            });
+                          },
+                          icon: Icon(
+                              isPass ? Icons.visibility : Icons.visibility_off),
+                        ),
                         validator: (value) => value!.isEmpty
                             ? "Masukkan password"
                             : value.length < 8

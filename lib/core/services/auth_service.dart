@@ -67,15 +67,21 @@ class AuthService {
 
   Future<List<Minuman>?> fetchMinuman() async {
     try {
-      final response = await http.get(Uri.parse("$baseUrl/minuman"));
+      String? token = await _getToken();
+      final response = await http.get(
+        Uri.parse("$baseUrl/minuman"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+        },
+      );
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
 
         if (responseData['success'] == true &&
             responseData.containsKey('minuman')) {
-          List<dynamic> minumanData =
-              responseData['minuman']; // Ambil hanya array-nya
+          List<dynamic> minumanData = responseData['minuman'];
           return minumanData.map((item) => Minuman.fromJson(item)).toList();
         }
       }
@@ -126,5 +132,10 @@ class AuthService {
       return User.fromJson(jsonDecode(userData));
     }
     return null;
+  }
+
+  _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(AuthService.tokenKey);
   }
 }

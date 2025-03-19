@@ -33,10 +33,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _loadUserData() async {
     User? user = await _getUser();
-    String? token = await _getToken();
+    // String? token = await _getToken();
 
     setState(() {
-      if (user != null && token != null) {
+      if (user != null) {
         username = user.name;
       } else {
         username = "guest";
@@ -57,11 +57,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
     }
     return null;
-  }
-
-  Future<String?> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(AuthService.tokenKey);
   }
 
   Future<void> _logout() async {
@@ -139,7 +134,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _buildNavItem(Icons.settings, "Profile", 4),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: _selectedIndex == 0
+            ? Colors.blue
+            : _selectedIndex == 1
+                ? Colors.green
+                : _selectedIndex == 2
+                    ? Colors.red
+                    : _selectedIndex == 3
+                        ? Colors.yellow
+                        : Colors.purple,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         showSelectedLabels: false,
@@ -151,6 +154,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   BottomNavigationBarItem _buildNavItem(
       IconData icon, String label, int index) {
     bool isSelected = _selectedIndex == index;
+    Color selectedColor = _selectedIndex == 0
+        ? Colors.blue
+        : _selectedIndex == 1
+            ? Colors.green
+            : _selectedIndex == 2
+                ? Colors.red
+                : _selectedIndex == 3
+                    ? Colors.orange
+                    : Colors.purple;
 
     return BottomNavigationBarItem(
       icon: AnimatedContainer(
@@ -160,7 +172,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: isSelected ? Colors.blue : Colors.grey),
+            Icon(
+              icon,
+              color: isSelected
+                  ? (_selectedIndex == 0
+                      ? Colors.blue
+                      : _selectedIndex == 1
+                          ? Colors.green
+                          : _selectedIndex == 2
+                              ? Colors.red
+                              : _selectedIndex == 3
+                                  ? Colors.orange
+                                  : Colors.purple)
+                  : Colors.grey,
+            ),
             const SizedBox(width: 8),
             Flexible(
               child: AnimatedOpacity(
@@ -168,8 +193,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 opacity: isSelected ? 1.0 : 0.0,
                 child: Text(
                   label,
-                  style: const TextStyle(
-                    color: Colors.blue,
+                  style: TextStyle(
+                    color: isSelected ? selectedColor : Colors.grey,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,

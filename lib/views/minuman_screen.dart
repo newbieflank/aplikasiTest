@@ -66,10 +66,10 @@ class _MinumanScreenState extends State<MinumanScreen> {
                         ),
                         CustomText(
                             text:
-                                "Status: ${minuman.status == 0 ? 'Tersedia' : 'Habis'}",
+                                "Status: ${minuman.status == 1 ? 'Tersedia' : 'Habis'}",
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: minuman.status == 0
+                            color: minuman.status == 1
                                 ? Colors.green
                                 : Colors.red),
                       ],
