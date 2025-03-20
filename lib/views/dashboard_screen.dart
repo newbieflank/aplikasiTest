@@ -60,9 +60,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-
     final authProvider = Provider.of<AuthViewModel>(context, listen: false);
     await authProvider.logout();
 
@@ -72,9 +69,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (mounted) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   // 🔹 Widget untuk menampilkan halaman berdasarkan menu yang dipilih
@@ -168,40 +167,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
       icon: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: isSelected
+            ? BoxDecoration(
+                color: selectedColor,
+                borderRadius: BorderRadius.circular(20),
+              )
+            : null,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              color: isSelected
-                  ? (_selectedIndex == 0
-                      ? Colors.blue
-                      : _selectedIndex == 1
-                          ? Colors.green
-                          : _selectedIndex == 2
-                              ? Colors.red
-                              : _selectedIndex == 3
-                                  ? Colors.orange
-                                  : Colors.purple)
-                  : Colors.grey,
+              color: isSelected ? Colors.white : Colors.grey,
             ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: isSelected ? 1.0 : 0.0,
+            if (isSelected) ...[
+              const SizedBox(width: 8),
+              Flexible(
                 child: Text(
                   label,
                   style: TextStyle(
-                    color: isSelected ? selectedColor : Colors.grey,
+                    color: isSelected ? Colors.white : Colors.grey,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),

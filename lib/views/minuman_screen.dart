@@ -24,10 +24,17 @@ class _MinumanScreenState extends State<MinumanScreen> {
 
   Future<void> _loadMinumanData() async {
     List<Minuman>? data = await _authService.fetchMinuman();
+    if (!mounted) return;
     setState(() {
       minumanList = data ?? [];
       isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    // Tambahkan pembersihan resource jika ada
+    super.dispose();
   }
 
   @override

@@ -101,8 +101,23 @@ class AuthService {
   // Method untuk logout
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(userKey);
-    await prefs.remove(tokenKey);
+    try {
+      String? token = await _getToken();
+      final response = await http.get(
+        Uri.parse("$baseUrl/logout"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        await prefs.remove(userKey);
+        await prefs.remove(tokenKey);
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
   }
 
   // Simpan user data
